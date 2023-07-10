@@ -31,52 +31,40 @@
     </div>
     <script>
        
+       const API_KEY = `e550beb472f0eaf4eabe6978b9b5b81e`;
 
+const form = document.querySelector("form");
+const weather = document.querySelector("#weather");
+const search = document.querySelector("#search");
 
+const getweather = async (city) => {
+    const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`;
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(data)
+    return showWeather(data);
+};
 
-
-       const API_KEY = `e550beb472f0eaf4eabe6978b9b5b81e`
-
-
-const API =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
-//const IMG_URL = `ht9tps: //openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
-
-    const form = document.querySelector("form")
-    console.log(form)
-    const weather=document.querySelector("#weather")
-    console.log(weather)
-    const search=document.querySelector("#search")
-    console.log(search)
-
-    const getweather=async(city)=>{
-    const response= await fetch(url)
-    const convert=await response.json()
-    return showWeather(convert)
-
-
+const showWeather = (data) => {
+    if (data.cod === "404") {
+        weather.innerHTML = `<h2>City not found</h2>`;
+        return weather;
     }
+    weather.innerHTML = `
+        <div class="card-body" id="weather">
+            <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" class="card-img-top mt-2" alt="...">
+            <h5 class="card-title text-white">Temperature: ${data.main.temp}°C</h5>
+            <p class="card-text text-white">Weather: ${data.weather[0].main}</p>
+            <p><i class="fa-solid fa-droplet fa-beat"></i><span class="text-white">Humidity: ${data.main.humidity}%</span></p>
+            <p><i class="fa-solid fa-wind"></i><span class="text-white">Wind: ${data.wind.speed}mph</span></p>
+        </div>`;
+};
 
-    const showWeather=(data)=>{
-        if(data.cod == "404"){
-            weather.innerHTML=`<h2>city not found</h2>`
-            return weather
-        }
-        console.log(data)
-        weather.innerHTML=`<div class="card-body" id="weather">
-            <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"   class="card-img-top mt-2" alt="...">
-            <h5 class="card-title text-white">Temprature: ${data.main.temp}°C</h5>
-            <p class="card-text text-white"> Weather: ${data.weather[0].main}</p>
-           <p> <i class="fa-solid  fa-droplet fa-beat"></i> <span class="text-white">Humidity : ${data.main.humidity}%</span></p>
-            <i class="fa-solid  fa-wind"></i> <span class="text-white">Wind : ${data.wind.speed}mph</span>
+form.addEventListener("submit", function (e) {
+    getweather(search.value);
+    e.preventDefault();
+});
 
-            </div>`
-
-    }
-
-    form.addEventListener("submit",function(e){
-        getweather(search.value)
-        e.preventDefault()
-    })
 
 
 
