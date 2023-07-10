@@ -9,32 +9,78 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container-fluid  ">
-        <div class="container bg-light mt-5">
-            <div class="search">
-                <div class="input">
-                    <form>
-                        <input type="text" id ="serch" placeholder="enter a city">
-                        <button type="submit" class="btn btn-success" id="submit-btn">Search</button>
-                    </form> 
+    <div class="fluid-container ">
+        <h1 class=" text text-center text-white">Weather app</h1>
+        
+       <div class="cards  "> 
+            <div class="card  mt-5 " style="width: 18rem;">
+                    <div class="input p-3">
+                       <form action="">
 
+                           <input type="search" id="search" placeholder="Enter a  city">
+                       </form> 
+                    </div>
+                <div class="card-body" id="weather">
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"> </p>
+                    <p2></p2>
                 </div>
-                <div class="weather">
-                    <img src="">
-                    
-                    <h2>
-                        320c
-                    </h2>
-                    <h4>
-                        clear
-                    </h4>
-                </div>
-
+                
             </div>
         </div>
-
     </div>
     <script>
+       
+
+
+
+
+       const API_KEY = `e550beb472f0eaf4eabe6978b9b5b81e`
+
+
+const API =`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`
+//const IMG_URL = `ht9tps: //openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`
+
+    const form = document.querySelector("form")
+    console.log(form)
+    const weather=document.querySelector("#weather")
+    console.log(weather)
+    const search=document.querySelector("#search")
+    console.log(search)
+
+    const getweather=async(city)=>{
+    const response= await fetch(url)
+    const convert=await response.json()
+    return showWeather(convert)
+
+
+    }
+
+    const showWeather=(data)=>{
+        if(data.cod == "404"){
+            weather.innerHTML=`<h2>city not found</h2>`
+            return weather
+        }
+        console.log(data)
+        weather.innerHTML=`<div class="card-body" id="weather">
+            <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png"   class="card-img-top mt-2" alt="...">
+            <h5 class="card-title text-white">Temprature: ${data.main.temp}°C</h5>
+            <p class="card-text text-white"> Weather: ${data.weather[0].main}</p>
+           <p> <i class="fa-solid  fa-droplet fa-beat"></i> <span class="text-white">Humidity : ${data.main.humidity}%</span></p>
+            <i class="fa-solid  fa-wind"></i> <span class="text-white">Wind : ${data.wind.speed}mph</span>
+
+            </div>`
+
+    }
+
+    form.addEventListener("submit",function(e){
+        getweather(search.value)
+        e.preventDefault()
+    })
+
+
+
+
         
     </script>
     
